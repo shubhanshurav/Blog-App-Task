@@ -2,19 +2,21 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 function BlogForm({ onSubmit, initialData = {} }) {
-  const userId = localStorage.getItem("userId");
+  
+  // const storedUserId = localStorage.getItem("userId");
 
   const [formData, setFormData] = useState({
     title: initialData.title || "",
     description: initialData.description || "",
-    image: null,
-    userId,
+    imageUrl: null,
+    // userId: storedUserId || "",
   });
+
   const [imagePreview, setImagePreview] = useState(initialData.image || null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Update image preview when an image is selected
+    
     if (formData.image) {
       const fileReader = new FileReader();
       fileReader.onload = () => {
@@ -39,8 +41,8 @@ function BlogForm({ onSubmit, initialData = {} }) {
     if (
       !formData.title ||
       !formData.description ||
-      !formData.image ||
-      !userId
+      !formData.image 
+      // || !formData.userId
     ) {
       toast.error("All fields are required");
       return;
@@ -50,7 +52,7 @@ function BlogForm({ onSubmit, initialData = {} }) {
     data.append("title", formData.title);
     data.append("description", formData.description);
     data.append("imageUrl", formData.image);
-    data.append("userId", formData.userId);
+    // data.append("userId", formData.userId);
 
     setLoading(true);
     try {
@@ -109,4 +111,4 @@ function BlogForm({ onSubmit, initialData = {} }) {
   );
 }
 
-export default BlogForm; 
+export default BlogForm;

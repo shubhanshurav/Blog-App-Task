@@ -4,7 +4,8 @@ require("dotenv").config();
 
 exports.createBlog = async (req, res) => {
   try {
-    const { title, description, userId} = req.body;
+    const { title, description} = req.body;
+    // const { title, description, userId} = req.body;
 
 
      const imageUrl = req.files.imageUrl;
@@ -17,7 +18,7 @@ exports.createBlog = async (req, res) => {
     );
 
     const blog = new Blog({
-      userId,
+      // userId,
       title,
       imageUrl: postImage.secure_url,
       description,

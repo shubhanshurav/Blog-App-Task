@@ -43,8 +43,10 @@ export const login = async (email, password) => {
       password,
     });
 
-    const { profileImage} = response.data.user;
-    localStorage.setItem("profileImageUrl", profileImage);
+  const { profileImage } = response.data.user;
+  const { userId } = response.data.user._id;
+  localStorage.setItem("profileImageUrl", profileImage);
+  localStorage.setItem("userId", userId);
 
     return response.data;
   } catch (error) {
