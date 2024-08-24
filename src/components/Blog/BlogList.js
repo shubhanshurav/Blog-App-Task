@@ -2,6 +2,7 @@ import React from "react";
 import BlogItem from "./BlogItem";
 
 function BlogList({ blogs, onEdit, onDelete }) {
+  console.log(blogs)
   return (
     <div className="bg-white p-6 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Blog List</h2>
@@ -17,10 +18,10 @@ function BlogList({ blogs, onEdit, onDelete }) {
         <tbody>
           {blogs?.map((blog) => (
             <BlogItem
-              key={blog.id}
+              key={blog._id}
               blog={blog}
               onEdit={() => onEdit(blog)}
-              onDelete={() => onDelete(blog.id)}
+              onDelete={() => onDelete(blog._id)}
             />
           ))}
         </tbody>

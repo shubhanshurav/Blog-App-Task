@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { createBlog } from "../../services/operations/BlogApi";
 
-function BlogForm({ onSubmit, initialData = {} }) {
-  
-  // const storedUserId = localStorage.getItem("userId");
+function BlogForm({initialData = {} }) {
 
-  const [formData, setFormData] = useState({
-    title: initialData.title || "",
-    description: initialData.description || "",
-    imageUrl: null,
-    // userId: storedUserId || "",
-  });
+    const [formData, setFormData] = useState({
+      title: "",
+      description: "",
+      imageUrl: null,
+    });
 
-  const [imagePreview, setImagePreview] = useState(initialData.image || null);
-  const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(initialData.imageUrl || null);
+  // const [loading, setLoading] = useState(false);
+
+  console.log(formData);
 
   useEffect(() => {
-    
-    if (formData.image) {
+    if (formData.imageUrl) {
       const fileReader = new FileReader();
       fileReader.onload = () => {
         setImagePreview(fileReader.result);
       };
-      fileReader.readAsDataURL(formData.image);
+      fileReader.readAsDataURL(formData.imageUrl);
     } else {
-      setImagePreview(null); // Clear preview if no image
+      setImagePreview(null); 
     }
-  }, [formData.image]);
+  }, [formData.imageUrl]);
+
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -36,35 +36,45 @@ function BlogForm({ onSubmit, initialData = {} }) {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (
-      !formData.title ||
-      !formData.description ||
-      !formData.image 
-      // || !formData.userId
-    ) {
-      toast.error("All fields are required");
-      return;
-    }
+    const handleSubmit = async (e) => {
+      e.preventDefault();
 
-    const data = new FormData();
-    data.append("title", formData.title);
-    data.append("description", formData.description);
-    data.append("imageUrl", formData.image);
-    // data.append("userId", formData.userId);
+      try {
+        console.log("Submitting form data:", formData);
 
-    setLoading(true);
-    try {
-      await onSubmit(data);
-      console.log(data)
-      toast.success("Blog submitted successfully!");
-    } catch (error) {
-      toast.error("Failed to submit the blog");
-    } finally {
-      setLoading(false);
-    }
-  };
+        const response = await createBlog(formData);
+
+        console.log("blog ka data:", response);
+
+        toast.success("Blog Posted successfully!");
+      } catch (error) {
+        toast.error(error.message || "Failed to blog posted");
+      }
+    };
+
+  // // const handleSubmit = async (e) => {
+  // //   e.preventDefault();
+  // //   if (
+  // //     !formData.title ||
+  // //     !formData.description ||
+  // //     !formData.image
+  // //     // || !formData.userId
+  // //   ) {
+  // //     toast.error("All fields are required");
+  // //     return;
+  // //   }
+
+  // //   setLoading(true);
+  // //   try {
+  // //     await onSubmit(data);
+  // //     console.log(data);
+  // //     toast.success("Blog submitted successfully!");
+  // //   } catch (error) {
+  // //     toast.error("Failed to submit the blog");
+  // //   } finally {
+  // //     setLoading(false);
+  // //   }
+  // // };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
@@ -86,7 +96,7 @@ function BlogForm({ onSubmit, initialData = {} }) {
       />
       <input
         type="file"
-        name="image"
+        name="imageUrl"
         onChange={handleChange}
         className="w-full p-2 mb-4 border rounded"
       />
@@ -99,14 +109,12 @@ function BlogForm({ onSubmit, initialData = {} }) {
           />
         </div>
       )}
+    
       <button
         type="submit"
-        className={`bg-blue-500 text-white w-full py-2 rounded ${
-          loading ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        disabled={loading}
+        className="bg-blue-500 text-white w-full py-2 rounded cursor-pointer"
       >
-        {loading ? "Submitting..." : "Submit"}
+        Post Blog
       </button>
     </form>
   );
