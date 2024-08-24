@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { createBlog } from "../../services/operations/BlogApi";
+import { createBlog, updateBlog } from "../../services/operations/BlogApi";
 
-function BlogForm({initialData = {} }) {
+function BlogForm({ initialData = {}, isEditing = false }) {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    imageUrl: null,
+  });
 
-    const [formData, setFormData] = useState({
-      title: "",
-      description: "",
-      imageUrl: null,
-    });
-
-  const [imagePreview, setImagePreview] = useState(initialData.imageUrl || null);
-  // const [loading, setLoading] = useState(false);
-
-  console.log(formData);
+  const [imagePreview, setImagePreview] = useState(
+    initialData.imageUrl || null
+  );
 
   useEffect(() => {
     if (formData.imageUrl) {
@@ -22,11 +20,12 @@ function BlogForm({initialData = {} }) {
         setImagePreview(fileReader.result);
       };
       fileReader.readAsDataURL(formData.imageUrl);
+    } else if (initialData.imageUrl) {
+      setImagePreview(initialData.imageUrl);
     } else {
-      setImagePreview(null); 
+      setImagePreview(null);
     }
-  }, [formData.imageUrl]);
-
+  }, [formData.imageUrl, initialData.imageUrl]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -36,49 +35,32 @@ function BlogForm({initialData = {} }) {
     });
   };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      try {
-        console.log("Submitting form data:", formData);
+    try {
+      console.log("Submitting form data:", formData);
 
-        const response = await createBlog(formData);
-
-        console.log("blog ka data:", response);
-
-        toast.success("Blog Posted successfully!");
-      } catch (error) {
-        toast.error(error.message || "Failed to blog posted");
+      let response;
+      if (isEditing) {
+        response = await updateBlog(initialData._id, formData);
+        toast.success("Blog updated successfully!");
+      } else {
+        response = await createBlog(formData);
+        toast.success("Blog posted successfully!");
       }
-    };
 
-  // // const handleSubmit = async (e) => {
-  // //   e.preventDefault();
-  // //   if (
-  // //     !formData.title ||
-  // //     !formData.description ||
-  // //     !formData.image
-  // //     // || !formData.userId
-  // //   ) {
-  // //     toast.error("All fields are required");
-  // //     return;
-  // //   }
-
-  // //   setLoading(true);
-  // //   try {
-  // //     await onSubmit(data);
-  // //     console.log(data);
-  // //     toast.success("Blog submitted successfully!");
-  // //   } catch (error) {
-  // //     toast.error("Failed to submit the blog");
-  // //   } finally {
-  // //     setLoading(false);
-  // //   }
-  // // };
+      console.log("Blog response data:", response);
+    } catch (error) {
+      toast.error(error.message || "Failed to post blog");
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
-      <h2 className="text-xl font-bold mb-4">Add/Edit Blog</h2>
+      <h2 className="text-xl font-bold mb-4">
+        {isEditing ? "Edit" : "Add"} Blog
+      </h2>
       <input
         type="text"
         name="title"
@@ -109,12 +91,11 @@ function BlogForm({initialData = {} }) {
           />
         </div>
       )}
-    
       <button
         type="submit"
         className="bg-blue-500 text-white w-full py-2 rounded cursor-pointer"
       >
-        Post Blog
+        {isEditing ? "Update Blog" : "Post Blog"}
       </button>
     </form>
   );

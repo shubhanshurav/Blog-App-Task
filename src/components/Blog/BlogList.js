@@ -1,8 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BlogItem from "./BlogItem";
+import {
+  getBlogs,
+  updateBlog,
+  deleteBlog,
+} from "../../services/operations/BlogApi";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"; // Assuming you are using react-toastify for notifications
 
-function BlogList({ blogs, onEdit, onDelete }) {
-  console.log(blogs)
+function BlogList() {
+  const [blogs, setBlogs] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        const fetchedBlogs = await getBlogs();
+        setBlogs(fetchedBlogs);
+        // console.log(fetchedBlogs);
+      } catch (error) {
+        console.error("Failed to fetch blogs", error);
+      }
+    }
+    fetchBlogs();
+  }, []);
+
+  const handleEdit = (blog) => {
+    // Navigate to edit page with the blog ID
+    navigate(`/updateBlog/${blog._id}`, { state: { blog } });
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteBlog(id);
+      setBlogs(blogs.filter((blog) => blog._id !== id)); // Update state to remove deleted blog
+      toast.success("Blog deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete blog", error);
+      toast.error("Failed to delete blog");
+    }
+  };
+
   return (
     <div className="bg-white p-6 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4">Blog List</h2>
@@ -20,8 +58,8 @@ function BlogList({ blogs, onEdit, onDelete }) {
             <BlogItem
               key={blog._id}
               blog={blog}
-              onEdit={() => onEdit(blog)}
-              onDelete={() => onDelete(blog._id)}
+              onEdit={() => handleEdit(blog)}
+              onDelete={() => handleDelete(blog._id)}
             />
           ))}
         </tbody>

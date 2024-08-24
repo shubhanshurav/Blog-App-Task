@@ -54,7 +54,7 @@ export const updateBlog = async (id, formData) => {
 
   try {
     // console.log(formData)
-    const response = await axios.put(`${API_URL}/getAllBlogs/${id}`, form, {
+    const response = await axios.put(`${API_URL}/updateBlog/${id}`, form, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -69,7 +69,7 @@ export const updateBlog = async (id, formData) => {
 
 export const deleteBlog = async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}/getAllBlogs/${id}`);
+    const response = await axios.delete(`${API_URL}/deleteBlog/${id}`);
     return response.data;
   } catch (error) {
     throw error.response.data;

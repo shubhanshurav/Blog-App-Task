@@ -12,7 +12,7 @@ import BlogForm from "../components/Blog/BlogForm";
 import BlogList from "../components/Blog/BlogList";
 import BlogDetail from "../components/Blog/BlogDetail";
 import Navbar from "../components/Navbar";
-// import Navbar from "../components/Navbar";
+import ErrorPage from "../components/ErrorPage";
 
 
 function ProtectedRoute({ element, ...rest }) {
@@ -37,10 +37,14 @@ function AppRoutes() {
           path="/createBlog"
           element={<ProtectedRoute element={<BlogForm />} />}
         />
-        {/* <Route
-          path="/edit-blog/:id"
-          element={<ProtectedRoute element={<BlogForm />} />}
-        /> */}
+        <Route
+          path="/updateBlog/:id"
+          element={
+            <ProtectedRoute
+              element={<BlogForm initialData={blog} isEditing={true} />}
+            />
+          }
+        />
         <Route
           path="/getAllBlogs"
           element={<ProtectedRoute element={<BlogList />} />}
@@ -50,7 +54,7 @@ function AppRoutes() {
           element={<ProtectedRoute element={<BlogDetail />} />}
         />
 
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
   );
