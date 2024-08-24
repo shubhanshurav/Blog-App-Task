@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import BlogItem from "./BlogItem";
 import {
   getBlogs,
-  updateBlog,
+  // updateBlog,
   deleteBlog,
 } from "../../services/operations/BlogApi";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ function BlogList() {
 
   const handleEdit = (blog) => {
     // Navigate to edit page with the blog ID
-    navigate(`/updateBlog/${blog._id}`, { state: { blog } });
+    navigate(`/updateBlog/${blog._id}`);
   };
 
   const handleDelete = async (id) => {

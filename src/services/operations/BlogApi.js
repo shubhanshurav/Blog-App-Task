@@ -38,7 +38,7 @@ export const getBlogs = async () => {
 
 export const getBlogById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/getAllBlogs/${id}`);
+    const response = await axios.get(`${API_URL}/getBlogById/${id}`);
     return response.data;
   } catch (error) {
     throw error.response.data;

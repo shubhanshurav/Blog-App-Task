@@ -4,8 +4,8 @@ import { createBlog, updateBlog } from "../../services/operations/BlogApi";
 
 function BlogForm({ initialData = {}, isEditing = false }) {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    title: initialData.title || "",
+    description: initialData.description || "",
     imageUrl: null,
   });
 
