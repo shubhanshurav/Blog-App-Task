@@ -7,7 +7,6 @@ A simple blog application built with React, Node.js, Express.js, MongoDB, and Cl
 - **User Authentication:** Login/Signup with JWT.
 - **Blog CRUD:** Create, read, update, and delete blog posts.
 - **Image Upload:** Upload images to Cloudinary.
-- **Profile Management:** Update profile picture and bio.
 - **Notifications:** Toast notifications for success/error messages.
 
 ## Tech Stack
