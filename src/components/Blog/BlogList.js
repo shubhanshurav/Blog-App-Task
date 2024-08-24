@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import BlogItem from "./BlogItem";
 import {
   getBlogs,
-  // updateBlog,
   deleteBlog,
 } from "../../services/operations/BlogApi";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify"; // Assuming you are using react-toastify for notifications
+import { toast } from "react-toastify"; 
 
 function BlogList() {
   const [blogs, setBlogs] = useState([]);
@@ -25,9 +24,9 @@ function BlogList() {
     fetchBlogs();
   }, []);
 
-  const handleEdit = (blog) => {
+  const handleEdit = (id) => {
     // Navigate to edit page with the blog ID
-    navigate(`/updateBlog/${blog._id}`);
+    navigate(`/updateBlog/${id}`);
   };
 
   const handleDelete = async (id) => {
@@ -40,6 +39,10 @@ function BlogList() {
       toast.error("Failed to delete blog");
     }
   };
+
+  const viewFullBLog = (id) => {
+      navigate(`/viewFullBlog/${id}`);
+  }
 
   return (
     <div className="bg-white p-6 rounded shadow-md">
@@ -58,8 +61,9 @@ function BlogList() {
             <BlogItem
               key={blog._id}
               blog={blog}
-              onEdit={() => handleEdit(blog)}
+              onEdit={() => handleEdit(blog._id)}
               onDelete={() => handleDelete(blog._id)}
+              viewFullBLog={() => viewFullBLog(blog._id)}
             />
           ))}
         </tbody>

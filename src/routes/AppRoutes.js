@@ -15,6 +15,7 @@ import BlogDetail from "../components/Blog/BlogDetail";
 import Navbar from "../components/pages/Navbar";
 import ErrorPage from "../components/pages/ErrorPage";
 import { getBlogById } from "../services/operations/BlogApi"; 
+import useFetchBlog from "../components/hooks/useFetchBlog";
 
 function ProtectedRoute({ element, ...rest }) {
   const isAuthenticated = !!localStorage.getItem("token");
@@ -23,22 +24,7 @@ function ProtectedRoute({ element, ...rest }) {
 
 function EditBlogPage() {
   const { id } = useParams();
-  const [blog, setBlog] = useState(null);
-
-  useEffect(() => {
-    async function fetchBlog() {
-      try {
-        const fetchedBlog = await getBlogById(id);
-        setBlog(fetchedBlog);
-        console.log(fetchedBlog)
-      } catch (error) {
-        console.error("Failed to fetch blog", error);
-      }
-    }
-    fetchBlog();
-  }, [id]);
-
-  if (!blog) return <p>Loading...</p>;
+   const blog = useFetchBlog(id);
 
   return <BlogForm initialData={blog} isEditing={true} />;
 }
@@ -69,7 +55,7 @@ function AppRoutes() {
           element={<ProtectedRoute element={<BlogList />} />}
         />
         <Route
-          path="/getAllBlogs/:id"
+          path="/viewFullBlog/:id"
           element={<ProtectedRoute element={<BlogDetail />} />}
         />
 

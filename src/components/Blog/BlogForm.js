@@ -48,6 +48,13 @@ function BlogForm({ initialData = {}, isEditing = false }) {
       } else {
         response = await createBlog(formData);
         toast.success("Blog posted successfully!");
+
+        setFormData({
+          title: "",
+          description: "",
+          imageUrl: null,
+        });
+        setImagePreview(null);
       }
 
       console.log("Blog response data:", response);

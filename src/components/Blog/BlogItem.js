@@ -1,6 +1,6 @@
 import React from "react";
 
-function BlogItem({ blog, onEdit, onDelete }) {
+function BlogItem({ blog, onEdit, onDelete, viewFullBLog}) {
   return (
     <tr>
       <td className="border-b py-2">{blog.title}</td>
@@ -15,6 +15,9 @@ function BlogItem({ blog, onEdit, onDelete }) {
       <td className="border-b py-2">
         <button onClick={onEdit} className="text-blue-500">
           Edit
+        </button>
+        <button onClick={viewFullBLog} className="text-red-500 ml-4">
+          View
         </button>
         <button onClick={onDelete} className="text-red-500 ml-4">
           Delete
