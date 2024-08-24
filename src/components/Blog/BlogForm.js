@@ -57,6 +57,7 @@ function BlogForm({ onSubmit, initialData = {} }) {
     setLoading(true);
     try {
       await onSubmit(data);
+      console.log(data)
       toast.success("Blog submitted successfully!");
     } catch (error) {
       toast.error("Failed to submit the blog");

@@ -47,6 +47,7 @@ export const updateBlog = async (id, formData) => {
   if (image) form.append('image', image);
 
   try {
+    console.log(formData)
     const response = await axios.put(`${API_URL}/getAllBlogs/${id}`, form, {
       headers: {
         "Content-Type": "multipart/form-data",
